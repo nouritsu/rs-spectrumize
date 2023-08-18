@@ -1,2 +1,2 @@
 [workspace]
-members = ["spectrumize", "config-handler"]
+members = ["spectrumize", "config-handler", "project-file-manager"]
