@@ -1,6 +1,9 @@
 use crate::error::Error;
 use directories::ProjectDirs;
-use std::path::PathBuf;
+use std::{
+    fs::{self, File},
+    path::PathBuf,
+};
 
 const QUALIFIER: &str = "com";
 const ORGANIZATION: &str = "nouritsu";
@@ -17,13 +20,20 @@ impl PFM {
         let dirs =
             ProjectDirs::from(QUALIFIER, ORGANIZATION, APPLICATION).ok_or(Error::GetDirectory)?;
 
-        let config_file = dirs.config_dir().join("config.toml");
-        if !config_file.exists() { /* Create File & Write Default */ }
+        let config_dir = dirs.config_dir();
+        fs::create_dir_all(&config_dir).map_err(|e| Error::CreateDir(e))?;
+        let data_dir = dirs.data_dir();
+        fs::create_dir_all(&data_dir).map_err(|e| Error::CreateDir(e))?;
+        let log_dir = dirs.data_dir();
+        fs::create_dir_all(&log_dir).map_err(|e| Error::CreateDir(e))?;
 
-        let data_file = dirs.data_dir().join("data.json");
+        let config_file = config_dir.join("config.toml");
+        if !config_file.exists() {}
+
+        let data_file = data_dir.join("data.json");
         if !data_file.exists() { /* Create File & Write Starter */ }
 
-        let log_file = dirs.data_dir().join("log.log");
+        let log_file = log_dir.join("log.log");
         if !log_file.exists() { /* Create File & Write Init */ }
 
         Ok(PFM {
