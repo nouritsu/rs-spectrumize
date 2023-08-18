@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 directories = "5.0.1"
 thiserror = "1.0.47"
+handler = { version = "*", path = "../handler" }
+serde = { version = "1.0.183", features = ["derive"] }
+toml = "0.7.6"

@@ -1,7 +1,9 @@
 use crate::error::Error;
 use directories::ProjectDirs;
+use handler::config::Config;
 use std::{
     fs::{self, File},
+    io::Write,
     path::PathBuf,
 };
 
@@ -28,7 +30,13 @@ impl PFM {
         fs::create_dir_all(&log_dir).map_err(|e| Error::CreateDir(e))?;
 
         let config_file = config_dir.join("config.toml");
-        if !config_file.exists() {}
+        if !config_file.exists() {
+            let mut f = File::create(&config_file).map_err(|e| Error::CreateFile(e))?;
+            let default =
+                toml::to_string(&Config::default()).map_err(|e| Error::ConfigSerialize(e))?;
+            f.write(&default.as_bytes())
+                .map_err(|e| Error::WriteFile(e))?;
+        }
 
         let data_file = data_dir.join("data.json");
         if !data_file.exists() { /* Create File & Write Starter */ }

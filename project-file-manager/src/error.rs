@@ -11,4 +11,10 @@ pub enum Error {
 
     #[error("unable to create file, reason: {0}")]
     CreateFile(io::Error),
+
+    #[error("unable to serialize struct, reason: {0}")]
+    ConfigSerialize(toml::ser::Error),
+
+    #[error("unable to write to file, reason: {0}")]
+    WriteFile(io::Error),
 }
